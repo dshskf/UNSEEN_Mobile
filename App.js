@@ -6,7 +6,9 @@ import { store, persistor } from './redux/store'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import Home from './screen/home'
 import Authentication from './screen/Authentication'
+
 import Test from './test'
 
 export default function App() {
@@ -17,6 +19,7 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="Authentication" component={Authentication} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
