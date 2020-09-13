@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import { color } from '../../../constant/color'
 
 
-export const styles = StyleSheet.create({   
+export const styles = StyleSheet.create({
     item: {
         width: '100%',
-        height: '35%',
+        height: Dimensions.get('window').height > 920 ? 250 : 180,
         backgroundColor: 'white',
         flexDirection: 'row',
         elevation: 1,

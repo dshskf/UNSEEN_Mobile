@@ -4,14 +4,13 @@ import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
 
 import ToursItem from '../../../components/Home/tours/tours.component'
-import FilterAds from '../../../components/Home/filter.component'
 import Spinner from '../../../components/Spinner/spinner'
 
 import { get_product } from '../../../redux/products/products.action'
 import { styles } from './style'
 
 
-const Tours = props => {
+const AddAds = props => {
     const [products, setProducts] = useState(null)
 
     useEffect(() => {
@@ -22,11 +21,10 @@ const Tours = props => {
         fetch()
     }, [])
 
-    const ToursComponent = (data) => <ToursItem {...data.item} parentProps={props} navScreen={""} />
+    const ToursComponent = (data) => <ToursItem {...data.item} parentProps={props} navScreen={'Form'} />
 
     return (
         <View style={styles.container}>
-            <FilterAds />
             {
                 products ?
                     <FlatList
@@ -51,4 +49,4 @@ const mapDispatchToProps = (dispatch) => ({
     getProductData: (data) => dispatch(get_product(data))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tours);
+export default connect(mapStateToProps, mapDispatchToProps)(AddAds);

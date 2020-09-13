@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, FlatList, SafeAreaView } from 'react-native'
+import { View, FlatList } from 'react-native'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
 
