@@ -1,0 +1,6 @@
+shared element transition
+gesture
+image swiper
+
+npx jetify
+npx react-native run-android

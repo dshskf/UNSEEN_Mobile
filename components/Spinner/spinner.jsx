@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
-import { color } from '../../constant/color'
+import { color } from '../../constant/style'
 
 const Spinner = props => {
     return (

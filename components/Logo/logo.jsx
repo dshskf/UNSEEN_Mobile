@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, Keyboard, Animated, TouchableWithoutFeedback } from 'react-native'
 
-import { color } from '../../constant/color'
+import { color } from '../../constant/style'
 
 const LogoComponent = props => {
     const animation = useRef(new Animated.Value(0)).current

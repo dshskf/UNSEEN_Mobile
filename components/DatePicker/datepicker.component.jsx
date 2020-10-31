@@ -1,6 +1,6 @@
 import React from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { color } from '../../constant/color'
+import { color } from '../../constant/style'
 
 const DatePicker = props => {
     return (

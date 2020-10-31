@@ -5,9 +5,10 @@ import Ads from './Ads/index'
 import Articles from './Article/article'
 import Request from './Request/request'
 import Profile from './Profile/profile'
+import Chats from './chats/index'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-import { color } from '../constant/color'
+import { color } from '../constant/style'
 
 const Home = props => {
     const Bottom = createBottomTabNavigator()
@@ -38,7 +39,7 @@ const Home = props => {
             />
             <Bottom.Screen
                 name="Request"
-                component={Request}
+                component={Chats}
                 options={() => options('inbox', 'Request')}
             />
             <Bottom.Screen

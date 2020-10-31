@@ -1,26 +1,8 @@
-import { API } from '../../constant/link'
-import axios from 'axios'
+import { Get, Post } from '../../constant/request'
+import AsyncStorage from '@react-native-community/async-storage';
 
-export const authType = {
-    setToken: "SET_TOKEN",
-    setSocket: "SET_SOCKET",
-}
-
-
-const URL = API + "user"
-
-const Get = async (link, header = null) => {
-    if (header) {
-        return await axios.get(`${URL}/${link}`, header)
-    }
-    return await axios.get(`${URL}/${link}`)
-}
-
-const Post = async (link, data, header = null) => {
-    if (header) {
-        return await axios.post(`${URL}/${link}`, data, header)
-    }
-    return await axios.post(`${URL}/${link}`, data)
+const link = endpoint => {
+    return `auth/${endpoint}`
 }
 
 export const sign_up = (data) => async (dispatch) => {
@@ -29,6 +11,16 @@ export const sign_up = (data) => async (dispatch) => {
 }
 
 export const sign_in = (data) => async (dispatch) => {
-    const post = await Post('login', data)
+    const post = await Post(link('login'), data)
+
+    if (post.data.err) {
+        return post.data
+    }
+    if (!post.data.err) {
+        await AsyncStorage.setItem('user_token', post.data.token)
+    }
     return post.data
+}
+
+export const sign_out = (data) => async (dispatch) => {
 }

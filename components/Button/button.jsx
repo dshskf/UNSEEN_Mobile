@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { StyleSheet, View, Text, Animated, TouchableWithoutFeedback } from 'react-native'
-import { color } from '../../constant/color'
+import { color } from '../../constant/style'
 // import {} from ''
 
 const CustomButton = props => {

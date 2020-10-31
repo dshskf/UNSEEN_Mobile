@@ -3,7 +3,7 @@ import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
 
 import { pullToken } from '../../redux/auth/auth.selector'
-import { sign_up } from '../../redux/auth/auth.action'
+import { sign_up } from '../../redux/user/user.action'
 
 import {
     View,
@@ -35,14 +35,14 @@ const RegisterScreen = props => {
     const confirmAction = async () => {
         const { username, email, password } = inputData
 
-        const post = await props.postFormRegisters({
+        const post = await props.sign_up({
             username: username,
             email: email,
             password: password
-        })        
+        })
 
-        if (!post.err) {            
-            props.navigation.navigate('Login', {
+        if (!post.err) {
+            props.navigation.replace('Login', {
                 email: email
             })
         }
@@ -96,7 +96,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    postFormRegisters: (data) => dispatch(sign_up(data))
+    sign_up: (data) => dispatch(sign_up(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);

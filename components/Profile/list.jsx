@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-import { color } from '../../constant/color'
+import { color } from '../../constant/style'
 
 const ProfileList = props => {
     const opacity = .7

@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native'
-import { color } from '../../../constant/color'
+import { color } from '../../../constant/style'
 
 
 export const styles = StyleSheet.create({
@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
         width: '60%'
     },
     contentTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         color: color.primary,
     },

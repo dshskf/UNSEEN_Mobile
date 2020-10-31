@@ -1,13 +1,14 @@
 import React from 'react'
-import { View, Image, Text, TouchableOpacity,Dimensions } from 'react-native'
+import { View, Image, Text, TouchableOpacity, Dimensions } from 'react-native'
 import { Rating } from 'react-native-ratings';
 
-import { API } from '../../../constant/link'
+import { API } from '../../../constant/request'
 import { styles } from './style'
 
 const GuideItem = props => {
-    let { image, cost, username, destination, rating } = props
-    image = API + image[0].replace('\\', '/')
+    let { image, cost, username, destination, country, rating } = props
+    // image = API + image[0].replace('\\', '/')
+    username = username.length > 18 ? username.substring(0, 17) + '...' : username
 
     return (
         <TouchableOpacity
@@ -21,7 +22,7 @@ const GuideItem = props => {
                 </View>
                 <View style={styles.contentBox}>
                     <Text style={styles.contentTitle}>{username}</Text>
-                    <Text style={styles.contentName}>{destination}</Text>
+                    <Text style={styles.contentCity}>{country}</Text>                    
                     <View style={styles.bottomBox}>
                         <Text style={styles.contentPrice}>${cost}/h</Text>
                         <View style={styles.ratingBox}>

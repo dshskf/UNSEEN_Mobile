@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native'
-import { color } from '../../../constant/color'
+import { color } from '../../../constant/style'
 
 
 export const styles = StyleSheet.create({
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
         color: color.primary,
         position: 'relative'
     },
-    contentName: {
+    contentCity: {
         color: color.border
     },
     contentPrice: {

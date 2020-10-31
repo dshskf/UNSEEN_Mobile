@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { color } from '../../../constant/color'
+import { color } from '../../../constant/style'
 
 export const styles = StyleSheet.create({
     header: {
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     nameTitle: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 28,
+        fontSize: 26,
     },
     nameAction: {
         color: color.primary

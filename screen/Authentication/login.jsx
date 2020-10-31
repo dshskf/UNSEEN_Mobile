@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
+
 
 import { sign_in } from '../../redux/auth/auth.action'
 import {
@@ -39,15 +39,15 @@ const LoginScreen = props => {
     const confirmAction = async () => {
         const { username, password } = inputData
 
-        const post = await props.postFormLogin({
+        const post = await props.sign_in({
             username: username,
-            password: password
-        })
-        
-        if (!post.err) {            
-            await AsyncStorage.setItem('user_token', post.token)
-            
+            password: password,
+            type: 'agency'
+        })        
+        if (!post.err) {
+            props.navigation.replace('Home')
         }
+
     }
 
     return (
@@ -94,7 +94,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    postFormLogin: (data) => dispatch(sign_in(data))
+    sign_in: (data) => dispatch(sign_in(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
