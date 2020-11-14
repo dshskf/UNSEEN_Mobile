@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from 'react-native'
+import { StyleSheet, StatusBar, Dimensions } from 'react-native'
 import { color } from '../../../constant/style'
 
 
@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
     contactBox: {
         width: '100%',
         height: '10%',
+        minHeight: 60,
         backgroundColor: 'white',
         flexDirection: 'row',
         borderBottomColor: color.border,
@@ -83,6 +84,10 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontSize: 12
     },
+    flatlistBox: {
+        flex: 1,
+        width: '100%',        
+    },
     box: {
         width: '100%',
         paddingHorizontal: '5%',
@@ -110,9 +115,7 @@ export const styles = StyleSheet.create({
     },
     inputBox: {
         width: '100%',
-        height: 50,
-        position: 'absolute',
-        bottom: 0,
+        height: 50,        
         flexDirection: 'row',
         paddingLeft: 10,
         backgroundColor: 'white',

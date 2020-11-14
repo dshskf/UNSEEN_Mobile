@@ -15,6 +15,17 @@ export const get_tours_agency = (data) => async dispatch => {
     return get.data
 }
 
+export const get_tours_guides_detail = (data) => async dispatch => {
+    const post = await Post(link('guides/details'), data)
+    return post.data
+}
+
+export const get_tours_agency_detail = (data) => async dispatch => {
+    const post = await Post(link('agency/details'), data)
+    return post.data
+}
+
+
 export const get_tours_dashboard = (data) => async dispatch => {
     const get = await Get(link('dashboard'))
     return get.data
@@ -32,5 +43,10 @@ export const edit_tours = (data) => async dispatch => {
 
 export const delete_tours = (data) => async dispatch => {
     const post = await Post(link('dashboard/delete'), data)
+    return post.data
+}
+
+export const post_user_booking = (data) => async dispatch => {
+    const post = await Post(link('booking'), data)
     return post.data
 }

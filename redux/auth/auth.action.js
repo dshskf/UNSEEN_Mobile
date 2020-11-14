@@ -1,4 +1,4 @@
-import { Get, Post } from '../../constant/request'
+import { Post } from '../../constant/request'
 import AsyncStorage from '@react-native-community/async-storage';
 
 const link = endpoint => {
@@ -17,6 +17,12 @@ export const sign_in = (data) => async (dispatch) => {
         return post.data
     }
     if (!post.data.err) {
+        await AsyncStorage.setItem('login_data', JSON.stringify({
+            id: post.data.userData.id,
+            email: post.data.userData.email,
+            type: post.data.type,
+            typeCode: post.data.type[0].toUpperCase()
+        }))
         await AsyncStorage.setItem('user_token', post.data.token)
     }
     return post.data

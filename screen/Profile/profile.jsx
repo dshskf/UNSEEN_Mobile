@@ -20,7 +20,7 @@ const ProfileMainScreen = props => {
     }, [])
 
     const fetch = async () => {
-        const getUser = await props.get_profile()        
+        const getUser = await props.get_profile()
         setUser(getUser.data)
     }
 
@@ -28,7 +28,7 @@ const ProfileMainScreen = props => {
         user ?
             <View style={styles.container}>
                 <ProfileHeader {...user} />
-                <ProfileBox />
+                <ProfileBox {...props} />
                 <ProfileList {...props} />
             </View>
             :

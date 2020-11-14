@@ -1,10 +1,66 @@
-import React from 'react';
-import { View, Text, FlatList, TextInput, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, FlatList, TextInput, Image, TouchableOpacity, Keyboard } from 'react-native';
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux';
+import io from 'socket.io-client'
+
+import { chats_fetch_message, chats_send_message } from '../../../redux/features/features.action'
+import { pullSocket } from '../../../redux/features/features.selector'
+import { userStorage, API } from '../../../constant/request'
+
 import { styles } from './style'
 import { color } from '../../../constant/style'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+
 const Message = props => {
+    const [input, setInput] = useState('')
+    const [message, setMessage] = useState(null)
+    const [userData, setUserData] = useState(null)
+    const { senderId, senderType } = props.route.params
+    const tempMessage = useRef()
+    const flatlist = useRef()
+    const socket = useRef()
+
+    useEffect(() => {
+        (async () => {
+            let storage = await userStorage()
+
+            let req = await props.chats_fetch_message({
+                receiver_id: senderId,
+                receiver_type: senderType,
+            })
+            req = req.data.map((msg, i) => {
+                // Check if its user
+                if (parseInt(msg.sender_id) === parseInt(senderId) && msg.sender_type === senderType) msg.isUser = false
+                else msg.isUser = true
+
+                // Check last message for margin
+                if (req.data.length - 1 === i) msg.isLast = true
+                msg.createdAt = formatTime(msg.createdAt)
+
+                return msg
+            })
+
+            tempMessage.current = req
+            let io_conn = io(API)
+            io_conn.emit('join_room', {
+                room_id: `${storage.id}-${storage.type[0].toUpperCase()}`
+            })
+
+            io_conn.on('msg_response', async data => {
+                pushMessage(tempMessage.current, data, false)
+            })
+
+            socket.current = io_conn
+            setUserData(storage)
+            setMessage(req)
+        })()
+
+        return () => { socket.current.disconnect() }
+    }, [])
+
+
     const userMsg = {
         messageBox: {
             alignSelf: 'flex-end',
@@ -14,36 +70,78 @@ const Message = props => {
             color: 'white'
         }
     }
+
+    const formatTime = (time) => {
+        const date = new Date(time)
+        return `${date.getHours()}:${date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()}`
+    }
+
+    const handlerInput = val => {
+        setInput(val.nativeEvent.text)
+    }
+
+    const pushMessage = (msgData = null, msg, isUser) => {
+        const date = formatTime(Date.now())
+        const msgArr = msgData ? msgData : message
+        const new_data = [...msgArr, { ...msg, id: Math.random() * 100000 * Math.random(), isUser: isUser, createdAt: date, }]
+
+        tempMessage.current = new_data
+        setMessage(new_data)
+
+        if (flatlist.current) {
+            flatlist.current.scrollToEnd({ animated: true })
+        }
+
+    }
+
+    const send_message = async () => {
+        const msgData = {
+            sender_id: userData.id,
+            sender_type: userData.type[0].toUpperCase(),
+            receiver_id: senderId,
+            receiver_type: senderType,
+            content: input,
+        }
+        const req = await props.chats_send_message(msgData)
+
+        if (!req.err) {
+            socket.current.emit('msg', msgData)
+            pushMessage(null, msgData, true)
+            setInput('')
+            Keyboard.dismiss()
+        }
+    }
+
     const MsgComponent = data => (
         <View style={styles.container}>
             <View style={styles.box}>
                 <View style={{
                     ...styles.messageBox,
-                    ...data.item.user && userMsg.messageBox,
+                    ...data.item.isUser && userMsg.messageBox,
+                    // marginBottom: data.item.isLast && 80
                 }}>
-                    {
+                    {/* {
                         data.item.notifications && <View style={styles.adsBox}>
                             <View style={styles.adsImage}>
                                 <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ7ROTQk3ugONMyZPiGaexzfq-hdOxwcdQetQ&usqp=CAU" }} style={styles.image} />
                             </View>
                             <View style={styles.adsDetails}>
                                 <Text style={styles.adsTitle}>Holiday for 1 year pac...</Text>
-                                
+
                                 <Text style={styles.adsDestination}>3 Destinations</Text>
                             </View>
                         </View>
-                    }
+                    } */}
                     <Text style={{
                         ...styles.message,
-                        ...data.item.user && userMsg.message,
-                    }}>{data.item.msg}</Text>
-                    <Text style={styles.messageDate}>09:00 am</Text>
+                        ...data.item.isUser && userMsg.message,
+                    }}>{data.item.content}</Text>
+                    <Text style={styles.messageDate}>{data.item.createdAt}</Text>
                 </View>
             </View>
         </View>
     )
 
-    const data = [{ id: 1, msg: 'aaffffffffffffff', user: true, notifications: true }, { id: 2, msg: 'xwwwwwwwwwwwwwx', user: true, notifications: false }, { id: 3, msg: 'brtttttttttttteb', user: false, notifications: true },]
     return (
         <View style={styles.container}>
             <View style={styles.preventer} />
@@ -59,24 +157,44 @@ const Message = props => {
                     <Text style={styles.statusText}>Online</Text>
                 </View>
             </View>
-            <FlatList
-                keyExtractor={item => item.id.toString()}
-                data={data}
-                renderItem={MsgComponent}
-                style={{ flex: 1 }}
-            />
-            <View style={styles.inputBox}>
-                <TextInput
-                    multiline={true}
-                    placeholder="Enter a message..."
-                    underlineColorAndroid='transparent'
-                    style={styles.input} />
-                <View style={styles.sendBox}>
-                    <Icon name="md-send" style={styles.sendButton} />
+            {
+                message && <View style={styles.flatlistBox}>
+                    <FlatList
+                        keyExtractor={item => item.id.toString()}
+                        data={message}
+                        ref={flatlist}
+                        onContentSizeChange={() => flatlist.current.scrollToEnd({ animated: true })}
+                        renderItem={MsgComponent}
+                        style={{ flex: 1 }}
+                    />
                 </View>
-            </View>
+            }
+            {
+                message && <View style={styles.inputBox}>
+                    <TextInput
+                        multiline={true}
+                        placeholder="Enter a message..."
+                        underlineColorAndroid='transparent'
+                        value={input}
+                        onChange={handlerInput}
+                        style={styles.input} />
+                    <TouchableOpacity activeOpacity={0.8} onPress={send_message} style={styles.sendBox}>
+                        <Icon name="md-send" style={styles.sendButton} />
+                    </TouchableOpacity>
+                </View>
+            }
+
         </View>
     )
 }
 
-export default Message
+const mapStateToProps = createStructuredSelector({
+    socket: pullSocket
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    chats_fetch_message: (data) => dispatch(chats_fetch_message(data)),
+    chats_send_message: (data) => dispatch(chats_send_message(data)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Message);

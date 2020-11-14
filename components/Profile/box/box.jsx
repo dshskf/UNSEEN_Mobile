@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { styles } from './style'
 
@@ -10,10 +10,14 @@ const ProfileBox = props => {
                 <Icon style={styles.boxIcon} name="user-edit" />
                 <Text style={styles.boxLabel}>Edit Profile</Text>
             </View>
-            <View style={styles.boxItem}>
+            <TouchableOpacity
+                style={styles.boxItem}
+                onPress={() => props.navigation.navigate('Bookings')}
+                activeOpacity={0.7}
+            >
                 <Icon style={styles.boxIcon} name="map-marked-alt" />
                 <Text style={styles.boxLabel}>Track Location</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ ...styles.boxItem, borderRightWidth: 0 }}>
                 <Icon style={styles.boxIcon} name="plane-departure" />
                 <Text style={styles.boxLabel}>My Trip</Text>

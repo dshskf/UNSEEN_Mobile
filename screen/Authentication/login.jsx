@@ -47,7 +47,6 @@ const LoginScreen = props => {
         if (!post.err) {
             props.navigation.replace('Home')
         }
-
     }
 
     return (

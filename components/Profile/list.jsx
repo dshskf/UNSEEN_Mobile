@@ -45,12 +45,12 @@ const ProfileList = props => {
                 </View>
                 <Text style={styles.listTitle}>Trip Request</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={opacity} style={styles.listBox}>
+            {/* <TouchableOpacity activeOpacity={opacity} style={styles.listBox}>
                 <View style={styles.iconBox}>
                     <Icon name="times" style={styles.listIcon} />
                 </View>
                 <Text style={styles.listTitle}>Trip Dibatalkan</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }
