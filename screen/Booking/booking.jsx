@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
 import BookingCard from '../../components/BookingCard/card'
+import { useIsFocused } from '@react-navigation/native'
 
 import { get_booking_agency, update_booking_agency } from '../../redux/management/management.action'
 
@@ -17,15 +18,28 @@ import { styles } from './style'
 const BookingScreen = props => {
     const [booking, setBooking] = useState(null)
     const [refresh, setRefresh] = useState(false)
+    const [page, setPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(null)
+    const isFocused = useIsFocused()
+    const isFetch = useRef(false)
 
     useEffect(() => {
+        return () => setPage(1)
+    }, [isFocused])
+
+
+    useEffect(() => {
+        isFetch.current = false
         fetch()
-    }, [])
+    }, [page])
 
     const fetch = async () => {
-        const getBooking = await props.get_booking_agency()
-        console.log(getBooking.data)
-        setBooking(getBooking.data)
+        const getBooking = await props.get_booking_agency({
+            page: page,
+            is_mobile: true
+        })        
+        setTotalPage(getBooking.total_page)
+        setBooking(getBooking.data)        
     }
 
     const refreshHandler = async () => {
@@ -34,7 +48,18 @@ const BookingScreen = props => {
         setRefresh(false)
     }
 
-    const handleAlertBox = (id, payed, active) => {
+    const handleListPagination = () => {
+        if (totalPage && page < totalPage) {
+            isFetch.current = true
+            setPage(page + 1)
+        }
+    }
+
+    const loadPaginationSpinner = () => {
+        return isFetch.current ? (<Spinner extStyle={styles.footerLoad} />) : null
+    }
+
+    const handleConfirm = (id, payed, active) => {
         if (payed && !active) {
             Alert.alert(
                 null,
@@ -48,6 +73,10 @@ const BookingScreen = props => {
                 ],
                 { cancelable: false }
             );
+        } else {
+            props.navigation.replace('Tracking', {
+                booking_id: id
+            })
         }
 
     }
@@ -69,7 +98,7 @@ const BookingScreen = props => {
         }
     }
 
-    const cardScreen = (data) => <BookingCard action={handleAlertBox} {...data.item} />
+    const cardScreen = (data) => <BookingCard action={handleConfirm} {...data.item} />
 
     return (
         <View style={styles.container}>
@@ -84,6 +113,9 @@ const BookingScreen = props => {
                         onRefresh={refreshHandler}
                     />
                 }
+                onEndReached={handleListPagination}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={loadPaginationSpinner}
             />
         </View>
     )
@@ -95,7 +127,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    get_booking_agency: () => dispatch(get_booking_agency()),
+    get_booking_agency: (data) => dispatch(get_booking_agency(data)),
     update_booking_agency: (data) => dispatch(update_booking_agency(data))
 })
 

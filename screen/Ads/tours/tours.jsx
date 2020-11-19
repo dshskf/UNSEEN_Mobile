@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { View, FlatList, RefreshControl } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, FlatList, RefreshControl, Dimensions } from 'react-native'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native'
 
 import ToursItem from '../../../components/Home/tours/tours.component'
 import FilterAds from '../../../components/Home/filter.component'
@@ -15,13 +16,24 @@ import { styles } from './style'
 const Tours = props => {
     const [tours, setTours] = useState(null)
     const [refresh, setRefresh] = useState(false)
+    const [page, setPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(null)
+    
+    const isFocused = useIsFocused()
+    const isFetch = useRef(false)
 
     useEffect(() => {
+        return () => setPage(1)
+    }, [isFocused])
+
+    useEffect(() => {
+        isFetch.current = false
         fetch()
-    }, [])
+    }, [page])
 
     const fetch = async () => {
-        const tours = await props.get_tours_agency()
+        const tours = await props.get_tours_agency({ page: page, is_mobile: true })
+        setTotalPage(tours.total_page)
         setTours(tours.tours)
     }
 
@@ -31,8 +43,23 @@ const Tours = props => {
         setRefresh(false)
     }
 
+    const handleListPagination = () => {
+        if (totalPage && page < totalPage) {
+            isFetch.current = true
+            setPage(page + 1)
+        }
+    }
 
-    const ToursComponent = (data) => <ToursItem {...data.item} parentProps={props} navScreen={"ToursDetails"} />
+    const loadPaginationSpinner = () => {
+        return isFetch.current ? (<Spinner extStyle={styles.footerLoad} />) : null
+    }
+
+
+    const ToursComponent = (data) => <ToursItem
+        {...data.item}
+        parentProps={props}
+        navScreen={"ToursDetails"}        
+    />
 
     return (
         <View style={styles.container}>
@@ -44,12 +71,16 @@ const Tours = props => {
                         data={tours}
                         renderItem={ToursComponent}
                         style={{ flex: 1 }}
+                        // onScroll={handleListPagination}
                         refreshControl={
                             <RefreshControl
                                 refreshing={refresh}
                                 onRefresh={refreshHandler}
                             />
                         }
+                        onEndReached={handleListPagination}
+                        onEndReachedThreshold={0.1}
+                        ListFooterComponent={loadPaginationSpinner}
                     />
                     :
                     <Spinner />

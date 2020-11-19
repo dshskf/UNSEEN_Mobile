@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import { styles } from './style'
 
 const ProfileHeader = props => {
-    const { username, email } = props
+    const { username, email, navigation } = props
     return (
         <SafeAreaView style={styles.header}>
             <ImageBackground style={styles.ImageBackground} source={require('../../../assets/img/forest.jpg')}>
@@ -18,7 +18,7 @@ const ProfileHeader = props => {
                     </View>
                     <View style={styles.actionBox}>
                         <View style={styles.iconBox}>
-                            <Icon style={styles.actionIcon} name="message1" />
+                            <Icon style={styles.actionIcon} name="message1" onPress={navigation} />
                         </View>
                     </View>
                 </View>

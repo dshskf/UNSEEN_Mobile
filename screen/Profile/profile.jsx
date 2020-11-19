@@ -27,7 +27,7 @@ const ProfileMainScreen = props => {
     return (
         user ?
             <View style={styles.container}>
-                <ProfileHeader {...user} />
+                <ProfileHeader {...user} navigation={() => props.navigation.navigate('Chats')} />
                 <ProfileBox {...props} />
                 <ProfileList {...props} />
             </View>

@@ -25,10 +25,11 @@ const Message = props => {
     useEffect(() => {
         (async () => {
             let storage = await userStorage()
-
+            const tours_type = storage.typeCode === 'U' ? receiver_type : storage.typeCode
             let req = await props.chats_fetch_message({
                 receiver_id: senderId,
                 receiver_type: senderType,
+                tours_type: tours_type
             })
             req = req.data.map((msg, i) => {
                 // Check if its user
@@ -112,35 +113,38 @@ const Message = props => {
         }
     }
 
-    const MsgComponent = data => (
-        <View style={styles.container}>
-            <View style={styles.box}>
-                <View style={{
-                    ...styles.messageBox,
-                    ...data.item.isUser && userMsg.messageBox,
-                    // marginBottom: data.item.isLast && 80
-                }}>
-                    {/* {
-                        data.item.notifications && <View style={styles.adsBox}>
-                            <View style={styles.adsImage}>
-                                <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ7ROTQk3ugONMyZPiGaexzfq-hdOxwcdQetQ&usqp=CAU" }} style={styles.image} />
-                            </View>
-                            <View style={styles.adsDetails}>
-                                <Text style={styles.adsTitle}>Holiday for 1 year pac...</Text>
+    const MsgComponent = data => {
+        let image = data.item.tours_id ? API + data.item.tours_image[0].replace('\\', '/') : null
+        return (
+            <View style={styles.container}>
+                <View style={styles.box}>
+                    <View style={{
+                        ...styles.messageBox,
+                        ...data.item.isUser && userMsg.messageBox,
+                        // marginBottom: data.item.isLast && 80
+                    }}>
+                        {
+                            data.item.tours_id && <View style={styles.adsBox}>
+                                <View style={styles.adsImage}>
+                                    <Image source={{ uri: image }} style={styles.image} />
+                                </View>
+                                <View style={styles.adsDetails}>
+                                    <Text style={styles.adsTitle}>{data.item.tours_title}</Text>
 
-                                <Text style={styles.adsDestination}>3 Destinations</Text>
+                                    <Text style={styles.adsDestination}>${data.item.tours_cost}</Text>
+                                </View>
                             </View>
-                        </View>
-                    } */}
-                    <Text style={{
-                        ...styles.message,
-                        ...data.item.isUser && userMsg.message,
-                    }}>{data.item.content}</Text>
-                    <Text style={styles.messageDate}>{data.item.createdAt}</Text>
+                        }
+                        <Text style={{
+                            ...styles.message,
+                            ...data.item.isUser && userMsg.message,
+                        }}>{data.item.content}</Text>
+                        <Text style={styles.messageDate}>{data.item.createdAt}</Text>
+                    </View>
                 </View>
             </View>
-        </View>
-    )
+        )
+    }
 
     return (
         <View style={styles.container}>

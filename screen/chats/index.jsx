@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
@@ -20,7 +21,7 @@ const Chats = props => {
             showIcon: true,
             indicatorStyle: { backgroundColor: 'white', elevation: 4 },
             tabStyle: { flexDirection: 'row' },
-            style: { backgroundColor: color.primary },
+            style: { backgroundColor: color.primary, paddingTop: StatusBar.currentHeight },
         }}>
             <Tab.Screen name="List" component={Contact} options={{
                 tabBarLabel: "Chats",
@@ -38,7 +39,7 @@ const Chats = props => {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Contact" children={TabNavigator} />
+            <Stack.Screen name="Contact" children={TabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="Message" component={Message} options={{ headerShown: false }} />
         </Stack.Navigator>
     )

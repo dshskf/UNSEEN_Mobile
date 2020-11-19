@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, Dimensions } from 'react-native'
+import { StyleSheet, StatusBar } from 'react-native'
 import { color } from '../../../constant/style'
 
 
@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
     },
     flatlistBox: {
         flex: 1,
-        width: '100%',        
+        width: '100%',
     },
     box: {
         width: '100%',
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     },
     inputBox: {
         width: '100%',
-        height: 50,        
+        height: 50,
         flexDirection: 'row',
         paddingLeft: 10,
         backgroundColor: 'white',

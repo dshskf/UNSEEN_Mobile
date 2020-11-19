@@ -2,11 +2,18 @@ import { StyleSheet, Dimensions } from 'react-native'
 import { color } from '../../../../constant/style'
 
 const width = Dimensions.get('screen').width
+const height = Dimensions.get('window').height
 const paddingHorizontal = 15
+
+const actionBoxHeight = 60
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    viewBox: {
+        height: height - actionBoxHeight,
+        width: '100%'
     },
     headerBox: {
         width: width,
@@ -67,7 +74,7 @@ export const styles = StyleSheet.create({
     },
     destinationScroll: {
         backgroundColor: color.primary,
-        paddingHorizontal: paddingHorizontal,        
+        paddingHorizontal: paddingHorizontal,
     },
     destination: {
         height: '100%',
@@ -90,6 +97,7 @@ export const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: 'white',
         padding: paddingHorizontal,
+        minHeight: 150
     },
     descriptionText: {
         color: color.grey_2
@@ -98,12 +106,13 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: width,
-        height: 60,
+        height: actionBoxHeight,
         backgroundColor: 'white',
         paddingHorizontal: paddingHorizontal,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'center',        
+        elevation: 20
     },
     actionIcon: {
         width: '14%',

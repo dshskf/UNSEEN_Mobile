@@ -19,8 +19,7 @@ const Contact = props => {
 
     useEffect(() => {
         (async () => {
-            let req = await props.chats_person_list()
-
+            let req = await props.chats_person_list()            
             req = req.data.map((user, i) => {
                 user.last_message = req.last_message[i].content
                 return user

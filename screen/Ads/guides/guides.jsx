@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { View, FlatList, RefreshControl } from 'react-native'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native'
 
 import GuideItem from '../../../components/Home/guides/guides.component'
 import FilterAds from '../../../components/Home/filter.component'
@@ -13,13 +14,24 @@ import { styles } from './style'
 const Guides = props => {
     const [tours, setTours] = useState(null)
     const [refresh, setRefresh] = useState(false)
+    const [page, setPage] = useState(1)
+    const [totalPage, setTotalPage] = useState(null)
+    const isFocused = useIsFocused()
+    const isFetch = useRef(false)
 
     useEffect(() => {
+        return () => setPage(1)
+    }, [isFocused])
+
+
+    useEffect(() => {
+        isFetch.current = false
         fetch()
-    }, [])
+    }, [page])
 
     const fetch = async () => {
-        const tours = await props.get_tours_guides()
+        const tours = await props.get_tours_guides({ page: 1, is_mobile: true })
+        setTotalPage(tours.total_page)
         setTours(tours.tours)
     }
 
@@ -29,6 +41,17 @@ const Guides = props => {
         setRefresh(true)
         await fetch()
         setRefresh(false)
+    }
+
+    const handleListPagination = () => {
+        if (totalPage && page < totalPage) {
+            isFetch.current = true
+            setPage(page + 1)
+        }
+    }
+
+    const loadPaginationSpinner = () => {
+        return isFetch.current ? (<Spinner extStyle={styles.footerLoad} />) : null
     }
 
 
@@ -49,6 +72,9 @@ const Guides = props => {
                                 onRefresh={refreshHandler}
                             />
                         }
+                        onEndReached={handleListPagination}
+                        onEndReachedThreshold={0.1}
+                        ListFooterComponent={loadPaginationSpinner}
                     />
                     :
                     <Spinner />

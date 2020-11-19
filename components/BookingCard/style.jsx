@@ -20,11 +20,11 @@ export const styles = StyleSheet.create({
     },
     imageBox: {
         width: '100%',
-        height: '40%',
+        height: '40%',        
     },
     image: {
         width: '100%',
-        height: '100%'
+        height: '100%',
     },
     titleBox: {
         height: '10%',

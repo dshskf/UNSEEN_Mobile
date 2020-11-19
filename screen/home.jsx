@@ -5,7 +5,6 @@ import Ads from './Ads/index'
 import Articles from './Article/article'
 import Request from './Request/request'
 import Profile from './Profile/profile'
-import Chats from './chats/index'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { color } from '../constant/style'
@@ -39,7 +38,7 @@ const Home = props => {
             />
             <Bottom.Screen
                 name="Request"
-                component={Chats}
+                component={Request}
                 options={() => options('inbox', 'Request')}
             />
             <Bottom.Screen

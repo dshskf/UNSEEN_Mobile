@@ -10,6 +10,8 @@ import Home from './screen/home'
 import Authentication from './screen/Authentication'
 import EditAdsScreen from './screen/Edit-Ads'
 import BookingScreen from './screen/Booking/booking'
+import Chats from './screen/chats/index'
+import Tracking from './screen/Track/track'
 
 import { tokenStorage, userStorage, API } from './constant/request'
 import { set_io_connection } from './redux/features/features.action'
@@ -21,14 +23,6 @@ const App = props => {
   useEffect(() => {
     (async () => {
       const tokens = await tokenStorage()
-      // let user = await userStorage()
-      // if (tokens && user) {        
-      //   let socket = io(API)
-      //   socket.emit('join_room', {
-      //     room_id: `${user.id}-${user.type[0].toUpperCase()}`
-      //   })
-      //   props.set_io_connection(socket)
-      // }
       setToken(tokens)
     })()
 
@@ -43,6 +37,8 @@ const App = props => {
         <Stack.Screen name="Authentication" component={Authentication} options={{ headerShown: false }} />
         <Stack.Screen name="EditAds" component={EditAdsScreen} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Bookings" component={BookingScreen} />
+        <Stack.Screen name="Chats" component={Chats} options={{ headerShown: false }} />
+        <Stack.Screen name="Tracking" component={Tracking} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

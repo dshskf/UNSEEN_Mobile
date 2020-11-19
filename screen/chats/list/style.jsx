@@ -5,7 +5,7 @@ let imgSize = { width: 55, height: 55 }
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     card: {
         width: '100%',

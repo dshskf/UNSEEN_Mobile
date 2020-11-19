@@ -7,7 +7,7 @@ import { API } from '../../../constant/request'
 import { styles } from './style'
 
 const ToursItem = props => {
-    let { id, image, title, username, destination, start_date, rating, parentProps, navScreen } = props
+    let { id, image, title, username, destination, start_date, rating, parentProps, navScreen} = props
     // image = API + image[0].replace('\\', '/')
     start_date = start_date.split('T')[0]
     title = title.length > 18 ? title.substring(0, 17) + '...' : title
