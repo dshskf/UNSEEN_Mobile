@@ -6,7 +6,7 @@ import { default as MCIcons } from 'react-native-vector-icons/MaterialCommunityI
 
 import { color } from '../../constant/style'
 import { styles } from './style'
-import { API } from '../../constant/request'
+import { API } from '../../constant/link'
 
 import {
     View,

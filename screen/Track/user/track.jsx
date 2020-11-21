@@ -5,14 +5,15 @@ import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
 import * as Location from 'expo-location';
 
-import { get_user_location, update_user_location } from '../../redux/features/features.action'
+import { get_user_location, update_user_location } from '../../../redux/features/features.action'
 import io from 'socket.io-client'
-import { API, userStorage } from '../../constant/request'
+import { API } from '../../../constant/link'
+import { userStorage } from '../../../constant/request'
 import { default as MCIcons } from 'react-native-vector-icons/MaterialCommunityIcons'
 import { styles } from './style'
+import { useIsFocused } from '@react-navigation/native';
 
 const Tracking = props => {
-    const [coords, setCoords] = useState({ lat: 0, lng: 0 });
     const [permission, setPermission] = useState(false)
     const [user, setUser] = useState(null)
     const [opponents, setOpponents] = useState(null)
@@ -23,12 +24,14 @@ const Tracking = props => {
     const tempRegion = useRef()
     const tempCoords = useRef()
     const socket = useRef()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         (async () => {
-            const storage = await userStorage();            
+            const storage = await userStorage();
             const fetch = await props.get_user_location({
                 booking_id: props.route.params.booking_id,
+                receiver_type: props.route.params.receiver_type
             })
 
             let user_data = fetch.data.filter(data => {
@@ -79,12 +82,10 @@ const Tracking = props => {
             await props.update_user_location({
                 lat: tempCoords.current.lat,
                 lng: tempCoords.current.lng,
-                id: tempUser.current.id,
-                type: tempUser.current.type
             })
             socket.current.disconnect()
         };
-    }, [])
+    }, [isFocused])
 
     const updateLocationOnSocket = async (opponents_data) => {
         if (opponents_data.lat !== tempOpponent.current.lat || opponents_data.lng !== tempOpponent.current.lng) {
@@ -108,7 +109,6 @@ const Tracking = props => {
 
         tempCoords.current = new_location;
         setPermission(true)
-        setCoords(new_location)
     }
 
     const calculateCenteredView = (u_lat, u_lng, o_lat, o_lng) => {
@@ -137,11 +137,16 @@ const Tracking = props => {
 
         tempCoords.current = new_location;
 
-        if (Math.abs(latitude) - Math.abs(user.lat) > 0.0001) {
+        if (Math.abs(latitude) - Math.abs(user.lat) > 0.00001) {
             socket.current.emit('update_location', {
                 ...new_location,
                 opposite_id: `${opponents.id}-${opponents.type}`
             })
+
+            const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
+
+            setUser(new_user)
+            tempUser.current = new_user
         }
     }
 

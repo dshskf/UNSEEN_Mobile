@@ -1,7 +1,6 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
-
-export const API = "http://192.168.1.15:1234/"
+import { API } from './link'
 
 export const tokenStorage = async () => {
     const tokens = await AsyncStorage.getItem('user_token')
@@ -9,8 +8,8 @@ export const tokenStorage = async () => {
 }
 
 export const userStorage = async () => {
-    const user = await AsyncStorage.getItem('login_data')    
-    return user ? JSON.parse(user) : user
+    const user = await AsyncStorage.getItem('login_data')
+    return user ? JSON.parse(user) : null
 }
 
 export const Get = async (route) => {

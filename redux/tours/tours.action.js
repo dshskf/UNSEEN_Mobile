@@ -4,9 +4,8 @@ const link = endpoint => {
     return `tours/${endpoint}`
 }
 
-export const get_tours_guides = (data) => async dispatch => {
+export const get_tours_guides = (data) => async dispatch => {    
     const post = await Post(link('guides'), data)
-
     return post.data
 }
 

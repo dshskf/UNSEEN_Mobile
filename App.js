@@ -6,14 +6,14 @@ import { createStructuredSelector } from 'reselect'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Home from './screen/home'
-import Authentication from './screen/Authentication'
-import EditAdsScreen from './screen/Edit-Ads'
-import BookingScreen from './screen/Booking/booking'
-import Chats from './screen/chats/index'
-import Tracking from './screen/Track/track'
+import { default as Home } from './screen/home'
+import { default as Authentication } from './screen/Authentication'
+import { default as EditAdsScreen } from './screen/Edit-Ads'
+import { default as BookingScreen } from './screen/Booking/index'
+import { default as Chats } from './screen/chats/index'
+import { default as Tracking } from './screen/Track/index'
 
-import { tokenStorage, userStorage, API } from './constant/request'
+import { tokenStorage } from './constant/request'
 import { set_io_connection } from './redux/features/features.action'
 
 const App = props => {

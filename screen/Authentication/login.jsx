@@ -42,8 +42,8 @@ const LoginScreen = props => {
         const post = await props.sign_in({
             username: username,
             password: password,
-            type: 'agency'
-        })        
+            type: 'users'
+        })
         if (!post.err) {
             props.navigation.replace('Home')
         }

@@ -7,7 +7,8 @@ import * as Location from 'expo-location';
 
 import { get_user_location, update_user_location } from '../../redux/features/features.action'
 import io from 'socket.io-client'
-import { API, userStorage } from '../../constant/request'
+import { API } from '../../constant/link'
+import { userStorage } from '../../constant/request'
 import { default as MCIcons } from 'react-native-vector-icons/MaterialCommunityIcons'
 import { styles } from './style'
 

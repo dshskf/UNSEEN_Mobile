@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ads from './Ads/index'
 import Articles from './Article/article'
 import Request from './Request/request'
-import Profile from './Profile/profile'
+import { default as Profile } from './Profile/index'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { color } from '../constant/style'

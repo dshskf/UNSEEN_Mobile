@@ -6,7 +6,8 @@ import io from 'socket.io-client'
 
 import { chats_fetch_message, chats_send_message } from '../../../redux/features/features.action'
 import { pullSocket } from '../../../redux/features/features.selector'
-import { userStorage, API } from '../../../constant/request'
+import { API } from '../../../constant/link'
+import { userStorage } from '../../../constant/request'
 
 import { styles } from './style'
 import { color } from '../../../constant/style'

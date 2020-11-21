@@ -7,7 +7,8 @@ import io from 'socket.io-client'
 
 import { pullSocket } from '../../../redux/features/features.selector'
 import { chats_person_list } from '../../../redux/features/features.action'
-import { userStorage, API } from '../../../constant/request'
+import { API } from '../../../constant/link'
+import { userStorage } from '../../../constant/request'
 
 import { styles } from './style'
 
@@ -19,7 +20,7 @@ const Contact = props => {
 
     useEffect(() => {
         (async () => {
-            let req = await props.chats_person_list()            
+            let req = await props.chats_person_list()
             req = req.data.map((user, i) => {
                 user.last_message = req.last_message[i].content
                 return user
