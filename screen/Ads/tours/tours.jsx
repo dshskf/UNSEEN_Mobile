@@ -18,7 +18,7 @@ const Tours = props => {
     const [refresh, setRefresh] = useState(false)
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState(null)
-    
+
     const isFocused = useIsFocused()
     const isFetch = useRef(false)
 
@@ -33,8 +33,13 @@ const Tours = props => {
 
     const fetch = async () => {
         const tours = await props.get_tours_agency({ page: page, is_mobile: true })
+        const formatTours = tours.tours.map(t => {
+            t.city = t.city.split(',')
+            return t
+        })
+
         setTotalPage(tours.total_page)
-        setTours(tours.tours)
+        setTours(formatTours)
     }
 
     const refreshHandler = async () => {
@@ -58,7 +63,7 @@ const Tours = props => {
     const ToursComponent = (data) => <ToursItem
         {...data.item}
         parentProps={props}
-        navScreen={"ToursDetails"}        
+        navScreen={"ToursDetails"}
     />
 
     return (

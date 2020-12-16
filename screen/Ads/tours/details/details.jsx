@@ -22,16 +22,19 @@ const ToursDetails = props => {
             tourId.current = adsId
 
             let post = await props.get_tours_agency_detail({ id: adsId })
-            let city = []
+            let destination = []
 
             // Collect City
             post = post.tours
             post.map(t => {
-                city.push(t.city_name)
+                destination.push({
+                    period: t.period,
+                    city: t.city_name
+                })
+
             })
             post = post[0]
-            post.city_name = city
-
+            post.destination = destination
             setTours(post)
         })()
     }, [])
@@ -88,32 +91,41 @@ const ToursDetails = props => {
                         </View>
                     </View>
                     <View style={styles.destinationBox}>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-                            style={styles.destinationScroll}>
-                            {
-                                tours.city_name.map((city, i) => {
-                                    let width = city.length * 12
-                                    return i !== tours.city_name.length - 1 ?
-                                        (
-                                            <View key={i} style={styles.destination}>
-                                                <Text style={styles.destinationCity}>{city}</Text>
-                                                <Text style={styles.destinationDash}>---</Text>
+                        <View style={styles.destinationTitleOverlay}></View>
+                        <Text style={styles.destinationTitle}>Destinations</Text>
+                        {
+                            tours.city_name.map((city, i) => {
+                                let width = city.length * 12
+                                return i !== tours.city_name.length - 1 ?
+                                    (
+                                        <View key={i}>
+                                            <View style={styles.destinationItem}>
+                                                <View style={styles.destinationIcon}>
+                                                    <FAIcon name="plane" style={styles.planeIcon} />
+                                                </View>
+                                                <View style={styles.destinationCity}>
+                                                    <Text style={styles.citiesText}>{city}</Text>
+                                                    <Text style={styles.durationText}>3 days</Text>
+                                                </View>
+                                            </View>
+                                            <Text style={styles.destinationSeparator}>------</Text>
+                                        </View>
+                                    )
+                                    :
+                                    (
+                                        <View key={i} style={styles.destinationItem}>
+                                            <View style={styles.destinationIcon}>
                                                 <FAIcon name="plane" style={styles.planeIcon} />
-                                                <Text style={styles.destinationDash}>---</Text>
                                             </View>
-                                        )
-                                        :
-                                        (
-                                            <View key={i} style={{ ...styles.destination, width: width }}>
-                                                <Text style={styles.destinationCity}>{city}</Text>
+                                            <View style={styles.destinationCity}>
+                                                <Text style={styles.citiesText}>{city}</Text>
+                                                <Text style={styles.durationText}>3 days</Text>
                                             </View>
-                                        )
-                                })
-                            }
-                        </ScrollView>
+
+                                        </View>
+                                    )
+                            })
+                        }
                     </View>
                     <View style={styles.descriptionBox}>
                         <Text style={styles.descriptionText}>{tours.description}</Text>

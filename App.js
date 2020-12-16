@@ -13,7 +13,7 @@ import { default as BookingScreen } from './screen/Booking/index'
 import { default as Chats } from './screen/chats/index'
 import { default as Tracking } from './screen/Track/index'
 
-import { tokenStorage } from './constant/request'
+import { tokenStorage, userStorage } from './constant/request'
 import { set_io_connection } from './redux/features/features.action'
 
 const App = props => {
@@ -23,6 +23,8 @@ const App = props => {
   useEffect(() => {
     (async () => {
       const tokens = await tokenStorage()
+      const storage=await userStorage()
+      console.log(storage)
       setToken(tokens)
     })()
 

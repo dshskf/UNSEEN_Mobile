@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Image, Text, TouchableOpacity, Dimensions } from 'react-native'
 import { Rating } from 'react-native-ratings';
+import { formatImage } from '../../../constant/middleware';
 
 import { API } from '../../../constant/request'
 import { styles } from './style'
@@ -18,7 +19,7 @@ const GuideItem = props => {
         >
             <View >
                 <View style={styles.imageBox}>
-                    <Image style={styles.image} source={{ uri: image }} />
+                    <Image style={styles.image} source={{ uri: formatImage(image) }} />
                 </View>
                 <View style={styles.contentBox}>
                     <Text style={styles.contentTitle}>{username}</Text>

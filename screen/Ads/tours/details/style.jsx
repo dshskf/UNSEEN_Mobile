@@ -3,7 +3,7 @@ import { color } from '../../../../constant/style'
 
 const width = Dimensions.get('screen').width
 const height = Dimensions.get('window').height
-const paddingHorizontal = 15
+const paddingHorizontal = 20
 
 const actionBoxHeight = 60
 
@@ -22,12 +22,14 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingVertical: 10,
         paddingHorizontal: paddingHorizontal,
-        position: 'relative'
+        position: 'relative',
+        elevation: 4,
     },
     headerName: {
         width: '70%',
         color: color.primary,
         fontSize: 22,
+        fontWeight: 'bold'
     },
     headerPrice: {
         color: color.grey_1,
@@ -59,45 +61,84 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomLeftRadius: 20,
+        borderBottomLeftRadius: 8,
         elevation: 10
     },
     slot: {
         color: 'white',
     },
     destinationBox: {
-        // marginTop: 30,
+        paddingVertical: 20,
         width: width,
-        height: 50,
         backgroundColor: 'white',
+        marginTop: 20,
         elevation: 4
     },
-    destinationScroll: {
-        backgroundColor: color.primary,
+    destinationTitle: {
+        width: 135,
+        paddingVertical: 10,
         paddingHorizontal: paddingHorizontal,
+        color: 'white',
+        backgroundColor: color.primary,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginLeft: 10
     },
-    destination: {
-        height: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
+    destinationTitleOverlay: {
+        width: 130,
+        height: 40,
+        backgroundColor: color.border,
+        position: 'absolute',
+        top: 10,
+        marginLeft: 5
+    },
+    destinationItem: {
+        width: width,
+        height: 60,
+        paddingHorizontal: paddingHorizontal,
+        flexDirection: 'row'
+    },
+    destinationIcon: {
+        justifyContent: 'center'
     },
     planeIcon: {
-        color: 'white',
-        fontSize: 22
+        borderWidth: 2,
+        borderRadius: 20,
+        borderColor: color.border,
+        width: 40,
+        height: 40,
+        padding: 10,
+        color: color.primary,
+        fontSize: 22,
     },
     destinationCity: {
-        color: 'white',
+        height: '100%',
+        justifyContent: 'center',
+        paddingLeft: 20,
     },
-    destinationDash: {
-        color: 'white',
-        marginHorizontal: 10,
-        fontSize: 22
+    citiesText: {
+        color: color.primary,
+        fontStyle: 'italic',
+    },
+    durationText: {
+        fontSize: 12,
+        color: color.grey_1
+    },
+    destinationSeparator: {
+        width: 40,
+        height: 20,
+        color: color.primary,
+        fontWeight: 'bold',
+        fontSize: 20,
+        transform: [{ rotateZ: '90deg' }],
+        marginLeft: paddingHorizontal + 5,
     },
     descriptionBox: {
         marginTop: 20,
         backgroundColor: 'white',
         padding: paddingHorizontal,
-        minHeight: 150
+        minHeight: 150,
+        elevation: 4,
     },
     descriptionText: {
         color: color.grey_2
@@ -111,7 +152,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: paddingHorizontal,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',        
+        alignItems: 'center',
         elevation: 20
     },
     actionIcon: {

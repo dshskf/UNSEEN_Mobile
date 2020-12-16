@@ -30,9 +30,9 @@ const Guides = props => {
     }, [isFocused])
 
     const fetch = async () => {        
-        const tours = await props.get_tours_guides({ page: 1, is_mobile: true })        
+        const tours = await props.get_tours_guides({ page: 1, is_mobile: true })                    
         setTotalPage(tours.total_page)
-        setTours(tours.tours)
+        setTours(tours.guides)
     }
 
     const GuidesComponent = (data) => <GuideItem {...data.item} />

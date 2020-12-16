@@ -88,9 +88,10 @@ const Tracking = props => {
     }, [isFocused])
 
     const updateLocationOnSocket = async (opponents_data) => {
+        console.log(opponents_data)
         if (opponents_data.lat !== tempOpponent.current.lat || opponents_data.lng !== tempOpponent.current.lng) {
             tempOpponent.current = { ...tempOpponent.current, lat: opponents_data.lat, lng: opponents_data.lng }
-            setOpponents(opponents_data)
+            setOpponents(tempOpponent.current)
         }
     }
 
@@ -136,17 +137,21 @@ const Tracking = props => {
         const new_location = { lat: latitude, lng: longitude }
 
         tempCoords.current = new_location;
+        const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
 
-        if (Math.abs(latitude) - Math.abs(user.lat) > 0.00001) {
+        setUser(new_user)
+        tempUser.current = new_user
+       
+
+        if (Math.abs(latitude) - Math.abs(user.lat) > 0.00001 || Math.abs(longitude) - Math.abs(user.lng) > 0.00001) {
             socket.current.emit('update_location', {
                 ...new_location,
                 opposite_id: `${opponents.id}-${opponents.type}`
-            })
-
-            const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
-
-            setUser(new_user)
-            tempUser.current = new_user
+            })       
+            await props.update_user_location({
+                lat: new_location.lat,
+                lng: new_location.lng,
+            })    
         }
     }
 
