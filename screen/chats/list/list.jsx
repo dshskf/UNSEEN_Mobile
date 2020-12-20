@@ -11,6 +11,7 @@ import { API } from '../../../constant/link'
 import { userStorage } from '../../../constant/request'
 
 import { styles } from './style'
+import { formatImage } from '../../../constant/middleware';
 
 const Contact = props => {
     const [contact, setContact] = useState(null)
@@ -21,12 +22,7 @@ const Contact = props => {
     useEffect(() => {
         (async () => {
             let req = await props.chats_person_list()
-            req = req.data.map((user, i) => {
-                user.last_message = req.last_message[i].content
-                return user
-            })
-
-            let storage = await userStorage()
+            let storage = await userStorage()            
             let io_conn = io(API)
             io_conn.emit('join_room', {
                 room_id: `${storage.id}-${storage.type[0].toUpperCase()}`
@@ -37,18 +33,18 @@ const Contact = props => {
             })
 
             socket.current = io_conn
-            tempContact.current = req
-            setContact(req)
+            tempContact.current = req.data
+            setContact(req.data)
         })()
 
         return () => socket.current.disconnect()
     }, [isFocused])
 
-    const pushMessage = (msg) => {
-        const new_data = tempContact.current.map(contact => {
+    const pushMessage = (msg) => {        
+        const new_data = tempContact.current.map(contact => {           
             if ((parseInt(contact.id) === parseInt(msg.sender_id) && contact.type === msg.sender_type) ||
                 (parseInt(contact.id) === parseInt(msg.receiver_id) && contact.type === msg.receiver_type)) {
-                contact.last_message = msg.content
+                contact.content = msg.content
                 return contact
             }
             return contact
@@ -58,15 +54,31 @@ const Contact = props => {
         setContact(new_data)
     }
 
+    const checkLastMessageLength = (msg) => {
+        return msg.length > 30 ? msg.substring(0, 30) + "..." : msg
+    }
+
+    const navigateToMessageRoom = (receiver) => {
+        props.navigation.navigate(
+            'Message',
+            {
+                receiverId: receiver.id,
+                receiverType: receiver.type,
+                receiverName: receiver.username,
+                receiverImage: receiver.image
+            }
+        )
+    }
+
     const CardComponent = (data) => (
-        <TouchableOpacity activeOpacity={0.7} onPress={() => props.navigation.navigate('Message', { senderId: data.item.id, senderType: data.item.type })} >
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigateToMessageRoom(data.item)} >
             <View style={styles.card}>
                 <View style={styles.cardImage}>
-                    <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ7ROTQk3ugONMyZPiGaexzfq-hdOxwcdQetQ&usqp=CAU" }} style={styles.image} />
+                    <Image source={{ uri: formatImage(data.item.image) }} style={styles.image} />
                 </View>
                 <View style={styles.cardDetails}>
                     <Text style={styles.cardName}>{data.item.username}</Text>
-                    <Text style={styles.cardMessage}>{data.item.last_message}</Text>
+                    <Text style={styles.cardMessage}>{checkLastMessageLength(data.item.content)}</Text>
                 </View>
                 {/* <View style={styles.cardBadges}>
                     <View style={styles.badgesBox}>
@@ -81,7 +93,7 @@ const Contact = props => {
         <View style={styles.container}>
             {
                 contact && <FlatList
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item.id.toString() + item.type.toString()}
                     data={contact}
                     renderItem={CardComponent}
                     style={{ flex: 1 }}

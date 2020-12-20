@@ -7,15 +7,14 @@ import { API } from '../../../constant/request'
 import { styles } from './style'
 
 const GuideItem = props => {
-    let { image, cost, username, destination, country, rating } = props
-    // image = API + image[0].replace('\\', '/')
+    let { image, cost, username, destination, country, rating,parentProps } = props    
     username = username.length > 18 ? username.substring(0, 17) + '...' : username
 
     return (
         <TouchableOpacity
             style={styles.item}
             activeOpacity={.8}
-            onPress={() => console.log(Dimensions.get('window').height)}
+            onPress={() =>  parentProps.navigation.navigate("GuidesDetails")}
         >
             <View >
                 <View style={styles.imageBox}>
@@ -25,7 +24,7 @@ const GuideItem = props => {
                     <Text style={styles.contentTitle}>{username}</Text>
                     <Text style={styles.contentCity}>{country}</Text>                    
                     <View style={styles.bottomBox}>
-                        <Text style={styles.contentPrice}>${cost}/h</Text>
+                        <Text style={styles.contentPrice}>Arizona</Text>
                         <View style={styles.ratingBox}>
                             <Rating
                                 type='custom'

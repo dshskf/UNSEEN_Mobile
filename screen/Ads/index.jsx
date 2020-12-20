@@ -4,7 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import Guides from './guides/guides'
 import Tours from './tours/tours'
-import ToursDetails from './tours/details/details'
+import { default as ToursDetails } from './tours/details/details'
+import { default as GuidesDetails } from './guides/details/details'
 
 const Ads = props => {
     const Tab = createMaterialTopTabNavigator()
@@ -20,6 +21,7 @@ const Ads = props => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="AdsTab" children={TabNavigator} />
+            <Stack.Screen name="GuidesDetails" component={GuidesDetails} options={{ headerShown: false }} />
             <Stack.Screen name="ToursDetails" component={ToursDetails} options={{ headerShown: false }} />
         </Stack.Navigator>
     )

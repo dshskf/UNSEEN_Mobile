@@ -29,9 +29,10 @@ const Tracking = props => {
     useEffect(() => {
         (async () => {
             const storage = await userStorage();
+
             const fetch = await props.get_user_location({
-                booking_id: props.route.params.booking_id,
-                receiver_type: props.route.params.receiver_type
+                id: props.route.params.id,
+                reqType: props.route.params.type
             })
 
             let user_data = fetch.data.filter(data => {
@@ -88,7 +89,7 @@ const Tracking = props => {
     }, [isFocused])
 
     const updateLocationOnSocket = async (opponents_data) => {
-        console.log(opponents_data)
+        console.log("Socket Update")
         if (opponents_data.lat !== tempOpponent.current.lat || opponents_data.lng !== tempOpponent.current.lng) {
             tempOpponent.current = { ...tempOpponent.current, lat: opponents_data.lat, lng: opponents_data.lng }
             setOpponents(tempOpponent.current)
@@ -113,6 +114,7 @@ const Tracking = props => {
     }
 
     const calculateCenteredView = (u_lat, u_lng, o_lat, o_lng) => {
+        console.log("Calculate Center")
         const distance_lat = u_lat - o_lat
         const distance_lng = Math.abs(u_lng) - Math.abs(o_lng)
 
@@ -124,12 +126,12 @@ const Tracking = props => {
     }
 
     const calculateZoomLevel = (u_lat, u_lng, o_lat, o_lng) => {
+        console.log("Calculate Zoom")
         const distance_lat = u_lat - o_lat;
         const distance_lng = Math.abs(u_lng) - Math.abs(o_lng)
         let calculatedDistance = Math.sqrt(Math.pow(distance_lng, 2) + Math.pow(distance_lat, 2))
 
         return calculatedDistance < 5 ? calculatedDistance * 1.4 : calculatedDistance + 2
-
     }
 
     const handleUserLocationChanges = async (coordinate) => {
@@ -137,25 +139,29 @@ const Tracking = props => {
         const new_location = { lat: latitude, lng: longitude }
 
         tempCoords.current = new_location;
-        const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
 
-        setUser(new_user)
-        tempUser.current = new_user
-       
+        const distance_lat = Math.abs(Math.abs(latitude) - Math.abs(tempUser.current.lat))
+        const distance_lng = Math.abs(Math.abs(longitude) - Math.abs(tempUser.current.lng))
 
-        if (Math.abs(latitude) - Math.abs(user.lat) > 0.00001 || Math.abs(longitude) - Math.abs(user.lng) > 0.00001) {
+        if (distance_lat > 0.00001 || distance_lng > 0.00001) {
+            const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
+                        
+            setUser(new_user)
+            tempUser.current = new_user
+
             socket.current.emit('update_location', {
                 ...new_location,
                 opposite_id: `${opponents.id}-${opponents.type}`
-            })       
+            })
             await props.update_user_location({
                 lat: new_location.lat,
                 lng: new_location.lng,
-            })    
+            })
         }
     }
 
     const handleOnFocus = () => {
+        console.log("Focused")
         let centerPosition = calculateCenteredView(user.lat, user.lng, opponents.lat, opponents.lng)
         let centerZoom = calculateZoomLevel(user.lat, user.lng, opponents.lat, opponents.lng)
         setRegion({
@@ -173,7 +179,7 @@ const Tracking = props => {
                 region && <MapView
                     style={styles.map}
                     region={region}
-                    followsUserLocation={true}
+                    // followsUserLocation={true}
                     showsUserLocation={true}
                     onUserLocationChange={handleUserLocationChanges}
                 >

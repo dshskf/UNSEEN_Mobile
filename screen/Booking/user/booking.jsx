@@ -102,19 +102,17 @@ const BookingScreen = props => {
                 null,
                 "Already pay this tour?",
                 [
-                    {
-                        text: "Cancel",
-                        style: "cancel"
-                    },
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: "Delete", onPress: () => deleteAction(id) },
                     { text: "Yes", onPress: () => confirmAction(id) }
                 ],
                 { cancelable: false }
             );
         } else if (payed && active) {
-            const filter = booking.filter(b => b.id === id)
+            // const filter = booking.filter(b => b.id === id)
             props.navigation.replace('Tracking', {
-                booking_id: id,
-                receiver_type: filter[0].receiver_type
+                id: id,
+                type: 'bookings'
             })
         }
         return
@@ -159,6 +157,25 @@ const BookingScreen = props => {
             alert("Success!")
         } else {
             alert(post.err)
+        }
+    }
+
+    const deleteAction = async (request_id) => {
+        let selected_booking = booking.filter(b => b.id === request_id)
+        selected_booking = selected_booking[0]
+
+        const dataToSubmit = {
+            booking_id: request_id,
+            tours_id: selected_booking.tours_id,
+            action: 'delete'
+        }
+
+        const post = await props.update_booking_user({ form: dataToSubmit, })
+
+
+        if (!post.err) {
+            const new_booking = booking.filter(b => b.id !== request_id)
+            setBooking(new_booking)
         }
     }
 

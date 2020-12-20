@@ -7,5 +7,9 @@ export const validateLogin = async () => {
 }
 
 export const formatImage = (path) => {
-    return API + path.replace('\\', '/')
+    if (path) {
+        return API + path.replace('\\', '/')
+    }
+    return path
+
 }

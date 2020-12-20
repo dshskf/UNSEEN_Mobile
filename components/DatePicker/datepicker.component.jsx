@@ -9,6 +9,7 @@ const DatePicker = props => {
             style={props.style}
             testID="dateTimePicker"
             value={new Date(Date.now())}
+            minimumDate={props.minDate ? props.minDate : Date.now()}
             mode={'date'}
             is24Hour={true}
             display="default"

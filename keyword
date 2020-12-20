@@ -4,3 +4,5 @@ image swiper
 
 npx jetify
 npx react-native run-android
+
+expo err(type in shell)-> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted

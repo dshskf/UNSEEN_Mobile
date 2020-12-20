@@ -17,7 +17,7 @@ const Guides = props => {
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState(null)
     const isFocused = useIsFocused()
-    const isFetch = useRef(false)    
+    const isFetch = useRef(false)
 
 
     useEffect(() => {
@@ -25,17 +25,17 @@ const Guides = props => {
         fetch()
     }, [page])
 
-    useEffect(() => {        
+    useEffect(() => {
         return () => setPage(1)
     }, [isFocused])
 
-    const fetch = async () => {        
-        const tours = await props.get_tours_guides({ page: 1, is_mobile: true })                    
+    const fetch = async () => {
+        const tours = await props.get_tours_guides({ page: 1, is_mobile: true })
         setTotalPage(tours.total_page)
         setTours(tours.guides)
     }
 
-    const GuidesComponent = (data) => <GuideItem {...data.item} />
+    const GuidesComponent = (data) => <GuideItem parentProps={props} {...data.item} />
 
     const refreshHandler = async () => {
         setRefresh(true)

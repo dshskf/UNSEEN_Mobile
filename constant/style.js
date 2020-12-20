@@ -7,6 +7,7 @@ export const color = {
     border: "#d9d9d9",
     border_2: '#f0f0f0',
     button_1: '#00aeff',
+    overlay: 'rgba(0,0,0,0.4)'
 }
 
 export const defaultStyle = {}

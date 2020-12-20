@@ -12,13 +12,14 @@ import { userStorage } from '../../../constant/request'
 import { styles } from './style'
 import { color } from '../../../constant/style'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { formatImage } from '../../../constant/middleware';
 
 
 const Message = props => {
     const [input, setInput] = useState('')
     const [message, setMessage] = useState(null)
     const [userData, setUserData] = useState(null)
-    const { senderId, senderType } = props.route.params
+    const { receiverId, receiverType, receiverName, receiverImage } = props.route.params
     const tempMessage = useRef()
     const flatlist = useRef()
     const socket = useRef()
@@ -26,15 +27,16 @@ const Message = props => {
     useEffect(() => {
         (async () => {
             let storage = await userStorage()
-            const tours_type = storage.typeCode === 'U' ? receiver_type : storage.typeCode
             let req = await props.chats_fetch_message({
-                receiver_id: senderId,
-                receiver_type: senderType,
-                tours_type: tours_type
+                sender_type: storage.typeCode,
+                receiver_id: receiverId,
+                receiver_type: receiverType,
+                tours_type: receiverType
             })
+
             req = req.data.map((msg, i) => {
                 // Check if its user
-                if (parseInt(msg.sender_id) === parseInt(senderId) && msg.sender_type === senderType) msg.isUser = false
+                if (parseInt(msg.sender_id) === parseInt(receiverId) && msg.sender_type === receiverType) msg.isUser = false
                 else msg.isUser = true
 
                 // Check last message for margin
@@ -96,12 +98,12 @@ const Message = props => {
 
     }
 
-    const send_message = async () => {
+    const send_message = async () => {        
         const msgData = {
             sender_id: userData.id,
             sender_type: userData.type[0].toUpperCase(),
-            receiver_id: senderId,
-            receiver_type: senderType,
+            receiver_id: receiverId,
+            receiver_type: receiverType,
             content: input,
         }
         const req = await props.chats_send_message(msgData)
@@ -155,10 +157,10 @@ const Message = props => {
                     <Icon name="md-arrow-back" style={styles.exitIcon} />
                 </TouchableOpacity>
                 <View style={styles.contactImage}>
-                    <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ7ROTQk3ugONMyZPiGaexzfq-hdOxwcdQetQ&usqp=CAU" }} style={styles.image} />
+                    <Image source={{ uri: formatImage(receiverImage) }} style={styles.image} />
                 </View>
                 <View style={styles.contactDetails}>
-                    <Text style={styles.nameText}>Elon Musk</Text>
+                    <Text style={styles.nameText}>{receiverName}</Text>
                     <Text style={styles.statusText}>Online</Text>
                 </View>
             </View>

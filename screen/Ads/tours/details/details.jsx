@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, ScrollView, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native'
 import { Rating } from 'react-native-ratings';
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import Carousel from '../../../../components/Carousel/carousel'
 import { default as EntypoIcon } from 'react-native-vector-icons/Entypo'
 import { default as FAIcon } from 'react-native-vector-icons/FontAwesome'
 import { get_tours_agency_detail, post_user_booking } from '../../../../redux/tours/tours.action'
+import { chats_send_message } from '../../../../redux/features/features.action'
 import { userStorage } from '../../../../constant/request'
 
 import { styles } from './style'
@@ -31,10 +32,11 @@ const ToursDetails = props => {
                     period: t.period,
                     city: t.city_name
                 })
-
             })
+
             post = post[0]
             post.destination = destination
+
             setTours(post)
         })()
     }, [])
@@ -57,6 +59,13 @@ const ToursDetails = props => {
             receiver_type: 'A'
         })
         if (!post.err) {
+            await props.chats_send_message({
+                receiver_id: tours.agencyId,
+                receiver_type: 'A',
+                content: "Hey! you got new orders",
+                tours_id: tourId.current,
+                tours_type: 'A'
+            })
             alert("Success!")
         } else {
             alert(post.err)
@@ -69,7 +78,7 @@ const ToursDetails = props => {
             <View style={styles.viewBox}>
                 <ScrollView style={styles.container}>
                     <Carousel
-                        data={data}
+                        imageArr={tours.image}
                         options={{ height: 320 }}
                     />
                     <View style={styles.headerBox}>
@@ -94,9 +103,9 @@ const ToursDetails = props => {
                         <View style={styles.destinationTitleOverlay}></View>
                         <Text style={styles.destinationTitle}>Destinations</Text>
                         {
-                            tours.city_name.map((city, i) => {
-                                let width = city.length * 12
-                                return i !== tours.city_name.length - 1 ?
+                            tours.destination.map((destination, i) => {
+                                // let width = city.length * 12
+                                return i !== tours.destination.length - 1 ?
                                     (
                                         <View key={i}>
                                             <View style={styles.destinationItem}>
@@ -104,8 +113,8 @@ const ToursDetails = props => {
                                                     <FAIcon name="plane" style={styles.planeIcon} />
                                                 </View>
                                                 <View style={styles.destinationCity}>
-                                                    <Text style={styles.citiesText}>{city}</Text>
-                                                    <Text style={styles.durationText}>3 days</Text>
+                                                    <Text style={styles.citiesText}>{destination.city}</Text>
+                                                    <Text style={styles.durationText}>{destination.period} days</Text>
                                                 </View>
                                             </View>
                                             <Text style={styles.destinationSeparator}>------</Text>
@@ -118,8 +127,8 @@ const ToursDetails = props => {
                                                 <FAIcon name="plane" style={styles.planeIcon} />
                                             </View>
                                             <View style={styles.destinationCity}>
-                                                <Text style={styles.citiesText}>{city}</Text>
-                                                <Text style={styles.durationText}>3 days</Text>
+                                                <Text style={styles.citiesText}>{destination.city}</Text>
+                                                <Text style={styles.durationText}>{destination.period} days</Text>
                                             </View>
 
                                         </View>
@@ -150,7 +159,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
     get_tours_agency_detail: (data) => dispatch(get_tours_agency_detail(data)),
-    post_user_booking: (data) => dispatch(post_user_booking(data))
+    post_user_booking: (data) => dispatch(post_user_booking(data)),
+    chats_send_message: (data) => dispatch(chats_send_message(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToursDetails);
