@@ -37,20 +37,22 @@ const Tracking = props => {
 
             let user_data = fetch.data.filter(data => {
                 if (data.type === storage.typeCode) {
-                    data.lat = parseFloat(data.lat)
-                    data.lng = parseFloat(data.lng)
+                    data.lat = isNaN(Number(data.lat)) ? -6.200000 : parseFloat(data.lat)
+                    data.lng = isNaN(Number(data.lng)) ? 106.816666 : parseFloat(data.lng)
+                    console.log(data)
                     return data
                 }
             })[0]
             let opponents_data = fetch.data.filter(data => {
                 if (data.type !== storage.typeCode) {
-                    data.lat = parseFloat(data.lat)
-                    data.lng = parseFloat(data.lng)
+                    data.lat = isNaN(Number(data.lat)) ? -6.200000 : parseFloat(data.lat)
+                    data.lng = isNaN(Number(data.lng)) ? 106.816666 : parseFloat(data.lng)
                     return data
                 }
             })[0]
 
-
+            console.log(user_data)
+            console.log(opponents_data)
             let region_data = {
                 latitude: user_data.lat,
                 longitude: user_data.lng,
@@ -65,7 +67,6 @@ const Tracking = props => {
             setUser(user_data)
             setOpponents(opponents_data)
             setRegion(region_data)
-
 
             // Set Socket            
             let io_conn = io(API)
@@ -89,7 +90,6 @@ const Tracking = props => {
     }, [isFocused])
 
     const updateLocationOnSocket = async (opponents_data) => {
-        console.log("Socket Update")
         if (opponents_data.lat !== tempOpponent.current.lat || opponents_data.lng !== tempOpponent.current.lng) {
             tempOpponent.current = { ...tempOpponent.current, lat: opponents_data.lat, lng: opponents_data.lng }
             setOpponents(tempOpponent.current)
@@ -140,19 +140,22 @@ const Tracking = props => {
 
         tempCoords.current = new_location;
 
-        const distance_lat = Math.abs(Math.abs(latitude) - Math.abs(tempUser.current.lat))
-        const distance_lng = Math.abs(Math.abs(longitude) - Math.abs(tempUser.current.lng))
+        const distance_lat = Math.abs(Math.abs(Math.abs(latitude) - Math.abs(tempUser.current.lat)))
+        const distance_lng = Math.abs(Math.abs(Math.abs(longitude) - Math.abs(tempUser.current.lng)))
 
         if (distance_lat > 0.00001 || distance_lng > 0.00001) {
             const new_user = { ...user, lat: new_location.lat, lng: new_location.lng }
-                        
+
             setUser(new_user)
             tempUser.current = new_user
 
-            socket.current.emit('update_location', {
-                ...new_location,
-                opposite_id: `${opponents.id}-${opponents.type}`
-            })
+            if (opponents.type !== 'A') {
+                socket.current.emit('update_location', { ...new_location, opposite_id: `${opponents.id}-G` })
+                socket.current.emit('update_location', { ...new_location, opposite_id: `${opponents.receiver_id}-A` })
+            } else {
+                socket.current.emit('update_location', { ...new_location, opposite_id: `${opponents.id}-A` })
+            }
+
             await props.update_user_location({
                 lat: new_location.lat,
                 lng: new_location.lng,
@@ -161,7 +164,6 @@ const Tracking = props => {
     }
 
     const handleOnFocus = () => {
-        console.log("Focused")
         let centerPosition = calculateCenteredView(user.lat, user.lng, opponents.lat, opponents.lng)
         let centerZoom = calculateZoomLevel(user.lat, user.lng, opponents.lat, opponents.lng)
         setRegion({
@@ -179,7 +181,7 @@ const Tracking = props => {
                 region && <MapView
                     style={styles.map}
                     region={region}
-                    // followsUserLocation={true}
+                    followsUserLocation={true}
                     showsUserLocation={true}
                     onUserLocationChange={handleUserLocationChanges}
                 >

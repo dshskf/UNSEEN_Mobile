@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import Ads from './Ads/index'
 import Articles from './Article/article'
-import Request from './Request/request'
 import { default as Profile } from './Profile/index'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
@@ -12,7 +11,7 @@ import { color } from '../constant/style'
 const Home = props => {
     const Bottom = createBottomTabNavigator()
 
-    const options = (name, label) => ({
+    const options = (name, label) => ({           
         tabBarLabel: label,
         tabBarIcon: ({ focused, color, size }) => (
             <Icon name={name} focused={focused} color={color} size={size} />
@@ -35,12 +34,7 @@ const Home = props => {
                 name="Articles"
                 component={Articles}
                 options={() => options('newspaper-o', 'Article')}
-            />
-            <Bottom.Screen
-                name="Request"
-                component={Request}
-                options={() => options('inbox', 'Request')}
-            />
+            />          
             <Bottom.Screen
                 name="Profile"
                 component={Profile}

@@ -23,7 +23,8 @@ export const styles = StyleSheet.create({
     formPicker: {
         height: 50,
         color: color.grey_1,
-        borderRadius: inputRadius
+        borderRadius: inputRadius,
+        marginVertical: 5
     },
     formTitle: {
         color: color.primary,
@@ -40,13 +41,14 @@ export const styles = StyleSheet.create({
     dateInput: {
         marginLeft: 10,
     },
-    textInput: {        
+    textInput: {
         borderWidth: 1,
         borderColor: color.border,
         borderRadius: inputRadius,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        marginVertical: 5
+        marginVertical: 5,
+        maxHeight: 140
     },
     viewArea: {
         height: containerHeight
@@ -133,7 +135,7 @@ export const styles = StyleSheet.create({
     },
     descriptionBox: {
         paddingHorizontal: paddingHorizontal,
-        paddingVertical: 10,
+        paddingVertical: 20,
         backgroundColor: 'white',
         elevation: 4,
         minHeight: 250

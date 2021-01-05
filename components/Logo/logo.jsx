@@ -39,8 +39,13 @@ const LogoComponent = props => {
         }]
     }
 
+    const navigateHome = () => {
+        Keyboard.dismiss()
+        props.navigation.replace('Home')
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <TouchableWithoutFeedback onPress={navigateHome}>
             <View style={styles.logo}>
                 <Animated.Image source={require('../../assets/img/logo.png')} style={[styles.logoImage, imageAnimatedStyle]} />
                 <Animated.Text style={[styles.logoText, textAnimatedStyle]}>UNSEEN</Animated.Text>

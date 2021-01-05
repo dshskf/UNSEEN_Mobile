@@ -20,6 +20,7 @@ export const sign_in = (data) => async (dispatch) => {
         await AsyncStorage.setItem('login_data', JSON.stringify({
             id: post.data.userData.id,
             email: post.data.userData.email,
+            username: post.data.userData.username,
             type: post.data.type,
             typeCode: post.data.type[0].toUpperCase()
         }))

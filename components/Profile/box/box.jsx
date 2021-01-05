@@ -11,17 +11,20 @@ const ProfileBox = props => {
                 <Text style={styles.boxLabel}>Edit Profile</Text>
             </View>
             <TouchableOpacity
-                style={styles.boxItem}
-                onPress={() => props.navigation.navigate('Bookings')}
+                style={styles.boxItem}                
                 activeOpacity={0.7}
             >
                 <Icon style={styles.boxIcon} name="map-marked-alt" />
                 <Text style={styles.boxLabel}>Track Location</Text>
             </TouchableOpacity>
-            <View style={{ ...styles.boxItem, borderRightWidth: 0 }}>
+            <TouchableOpacity
+                style={{ ...styles.boxItem, borderRightWidth: 0 }}
+                onPress={() => props.navigation.navigate('Bookings')}
+                activeOpacity={0.7}
+            >
                 <Icon style={styles.boxIcon} name="plane-departure" />
-                <Text style={styles.boxLabel}>My Trip</Text>
-            </View>
+                <Text style={styles.boxLabel}>My Tours</Text>
+            </TouchableOpacity>
         </View>
     )
 }

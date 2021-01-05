@@ -74,7 +74,7 @@ const Contact = props => {
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigateToMessageRoom(data.item)} >
             <View style={styles.card}>
                 <View style={styles.cardImage}>
-                    <Image source={{ uri: formatImage(data.item.image) }} style={styles.image} />
+                    <Image source={formatImage(data.item.image)} style={styles.image} />
                 </View>
                 <View style={styles.cardDetails}>
                     <Text style={styles.cardName}>{data.item.username}</Text>

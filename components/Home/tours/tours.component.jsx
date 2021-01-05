@@ -20,7 +20,7 @@ const ToursItem = props => {
         >
             <View style={styles.item} >
                 <View style={styles.imageBox}>
-                    <Image style={styles.image} source={{ uri: formatImage(image[0]) }} />
+                    <Image style={styles.image} source={formatImage(image[0])} />
                 </View>
                 <View style={styles.contentBox}>
                     <Text style={styles.contentTitle}>{title}</Text>

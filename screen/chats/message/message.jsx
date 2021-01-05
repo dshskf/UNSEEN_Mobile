@@ -157,7 +157,7 @@ const Message = props => {
                     <Icon name="md-arrow-back" style={styles.exitIcon} />
                 </TouchableOpacity>
                 <View style={styles.contactImage}>
-                    <Image source={{ uri: formatImage(receiverImage) }} style={styles.image} />
+                    <Image source={formatImage(receiverImage)} style={styles.image} />
                 </View>
                 <View style={styles.contactDetails}>
                     <Text style={styles.nameText}>{receiverName}</Text>

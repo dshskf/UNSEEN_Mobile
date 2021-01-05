@@ -5,6 +5,16 @@ const link = endpoint => {
 }
 
 
+export const get_request = (data) => async dispatch => {
+    const post = await Post(link('guides'), data)
+    return post.data
+}
+
+export const update_request = (data) => async dispatch => {
+    const post = await Post(link('guides/update'), data)
+    return post.data
+}
+
 export const get_approval = (data) => async dispatch => {
     const post = await Post(link('approval'), { action: data.action })
     return post.data

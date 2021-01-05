@@ -4,7 +4,7 @@ const link = endpoint => {
     return `tours/${endpoint}`
 }
 
-export const get_tours_guides = (data) => async dispatch => {    
+export const get_tours_guides = (data) => async dispatch => {
     const post = await Post(link('guides'), data)
     return post.data
 }
@@ -47,5 +47,22 @@ export const delete_tours = (data) => async dispatch => {
 
 export const post_user_booking = (data) => async dispatch => {
     const post = await Post(link('booking'), data)
+    return post.data
+}
+
+export const post_user_request = (data) => async dispatch => {
+    const post = await Post(link('request'), data)
+    return post.data
+}
+
+
+export const send_comment_booking = (data) => async dispatch => {
+    const post = await Post(link('comments/bookings'), data)
+    return post.data
+}
+
+
+export const send_comment_requests = (data) => async dispatch => {
+    const post = await Post(link('comments/requests'), data)
     return post.data
 }

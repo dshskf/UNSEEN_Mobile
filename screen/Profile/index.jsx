@@ -13,7 +13,7 @@ const Profile = props => {
 
     useEffect(() => {
         (async () => {
-            const isLogin = await validateLogin()
+            const isLogin = await validateLogin()            
             
             if (isLogin) {
                 setIsLogin(true)

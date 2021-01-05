@@ -20,7 +20,7 @@ const Ads = props => {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="AdsTab" children={TabNavigator} />
+            <Stack.Screen name="AdsTab" children={TabNavigator} options={{ headerLeft: null, title: 'Tours' }} />
             <Stack.Screen name="GuidesDetails" component={GuidesDetails} options={{ headerShown: false }} />
             <Stack.Screen name="ToursDetails" component={ToursDetails} options={{ headerShown: false }} />
         </Stack.Navigator>

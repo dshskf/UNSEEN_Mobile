@@ -56,7 +56,7 @@ const LoginScreen = props => {
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
                 <View style={styles.display}>
-                    <LogoComponent />
+                    <LogoComponent {...props} />
                     <View style={styles.form}>
                         <TextInput
                             style={styles.formInput}

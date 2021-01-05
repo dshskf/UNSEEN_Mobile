@@ -15,9 +15,10 @@ export const styles = StyleSheet.create({
     imageBox: {
         width: '100%',
         height: '60%',
+        alignItems:'center'
     },
     image: {
-        width: '100%',
+        width: '80%',
         height: '100%'
     },
     contentBox: {

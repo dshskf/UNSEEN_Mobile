@@ -15,7 +15,7 @@ import {
     TouchableOpacity
 } from 'react-native'
 
-const BookingCard = props => {
+const Card = props => {
     const iconSize = 24
 
     const icon = (name) => {
@@ -99,4 +99,4 @@ const BookingCard = props => {
     )
 }
 
-export default BookingCard
+export default Card

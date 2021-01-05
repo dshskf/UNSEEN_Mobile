@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
+import { color } from '../../constant/style';
 import { styles } from './style'
 
 class Modal extends React.Component {
@@ -17,7 +18,15 @@ class Modal extends React.Component {
                         {this.props.formComponent()}
                     </View>
                     <View style={styles.formButtonBox}>
-                        <TouchableOpacity activeOpacity={0.8} style={styles.formButton} onPress={this.props.onConfirm}>
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            style={{
+                                ...styles.formButton,
+                                backgroundColor: this.props.disabled ? color.primary_hover : color.primary,
+                            }}
+                            disabled={this.props.disabled}
+                            onPress={this.props.onConfirm}
+                        >
                             <Text style={styles.formButtonText}>{this.props.buttonLabel}</Text>
                         </TouchableOpacity>
                     </View>
